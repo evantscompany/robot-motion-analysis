@@ -1,0 +1,9 @@
+<robot name="my_robot">
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.15 0.10 0.05"/> </geometry>
+      <material name="blue"><color rgba="0 0 1 1"/></material>
+    </visual>
+  </link>
+</robot>

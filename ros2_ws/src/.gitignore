@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.env.*
+.pytest_cache/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*~
+
+# ROS2 build / install / log
+build/
+install/
+log/
+
+# ROS2 overlay workspace
+.rosinstall
+
+# macOS
+.DS_Store
+
+# Misc
+*.log
