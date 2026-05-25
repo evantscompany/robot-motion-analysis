@@ -14,6 +14,25 @@ class CorrectionNode(Node):
         # 현재 drift 저장 변수
         self.current_y = 0.0
 
+        
+        #===============================
+        # PID Variables (PID 변수 추가)
+        
+        # 현재 오차 
+        self.current_error = 0.0
+
+        # 이전 오차 -> Derivative 계산용
+        self.previous_error = 0.0
+
+        # 누적 오차 -> Integral 계산용
+        self.integral_error = 0.0
+
+        # 시간 저장
+        self.previous_time = self.get_clock().now()
+
+        #===============================
+
+
         # subscriber
 
         # 원본 cmd_vel 수신
@@ -44,8 +63,8 @@ class CorrectionNode(Node):
     # 현재 위치 업데이트
     def odom_callback(self,msg):
 
-        # 현재 y 위치 저장
-        self.current_y = msg.pose.pose.position.y
+        # 현재 y 위치 저장 -> y drift 를 오차로 사용
+        self.current_error = msg.pose.pose.position.y
 
     # cmd_vel 보정
     def cmd_callback(self,msg):
@@ -54,28 +73,84 @@ class CorrectionNode(Node):
         # 원래 linear 속도 유지
         corrected_msg.linear.x = msg.linear.x
 
-        # drrift 기반 angular correction
+        #===============================
+        # 현재 시간 계산
+        #===============================
 
-        # P-controller 형태
-        # y drift 가 크면 반대반향 회전 correction 추가
+        current_time = self.get_clock().now()
 
+        dt = (
+            current_time - self.previous_time
+        ).nanoseconds / 1e9
+
+        # dt 가 너무 작으면 division 방지
+        if dt == 0:
+            dt = 0.0001
+
+        #===============================
+        #PID Gain
+        #===============================
+        
         kp = -0.5
+        ki = -0.05
+        kd = -0.1
 
-        correction = kp*self.current_y
+        #===============================
+        # P Term
+        #===============================
 
-        corrected_msg.angular.z=(
-            msg.angular.z + correction
+        p_term = kp*self.current_error
+
+        #===============================
+        # I Term
+        #===============================
+
+        self.integral_error += self.current_error*dt
+        i_term = ki*self.integral_error
+
+        #===============================
+        # D Term
+        #===============================
+
+        derivate = (
+            self.current_error - self.previous_error
+        ) /dt
+
+        d_term = kd * derivate
+
+        #===============================
+        # Total Correction
+        #===============================
+
+        correction =(
+            p_term +
+            i_term +
+            d_term
         )
 
-        # publish
+        # angular correction 적용
+        corrected_msg.angular.z = (msg.angular.z+correction)
+
+        # publish 
         self.corrected_cmd_pub.publish(corrected_msg)
 
-        # 디버그 출력
+        #===============================
+        # 상태 업데이트
+        #===============================
+
+        self.previous_error = self.current_error
+        self.previous_time = current_time
+
+        #===============================
+        # 다비그 출력
+        #===============================
+
+
         self.get_logger().info(
-            f'Y Drift: {self.current_y:.3f} |'
+            f'Error : {self.current_error:.3f} |'
             f'Correction : {correction:.3f}'
         )
-
+      
 def main(args=None):
     rclpy.init(args=args)
     node = CorrectionNode()
