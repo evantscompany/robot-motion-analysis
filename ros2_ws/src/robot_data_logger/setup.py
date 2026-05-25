@@ -24,7 +24,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'logger_node = robot_data_logger.logger_node:main'
+            'logger_node = robot_data_logger.logger_node:main',
+            'correction_node = robot_data_logger.correction_node:main'
+
         ],
     },
 )
