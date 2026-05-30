@@ -24,6 +24,12 @@ class FakeRobotSimulator(Node):
             10
         )
 
+        # 마지막 cmd_vel 수신시간 - phase 15~16을 위한 추가 사항
+        self.last_cmd_time = self.get_clock().now()
+
+        # timeout 시간(초)
+        self.timeout_sec = 0.5
+
         # robot state
 
         self.x = 0.0
@@ -58,9 +64,31 @@ class FakeRobotSimulator(Node):
         self.angular_velocity=(
             msg.angular.z
         )
+
+        # phase15~16 기능을 위한 추가설정
+        # 마지막 수신 시각 갱신
+        self.last_cmd_time = self.get_clock().now()
     
     def update_robot(self):
         
+        # ==========================
+        # phase15~16을 위한 설정 추가
+        # 현재 시간
+        now = self.get_clock().now()
+        
+        # 마지막 명령 이후 경과시간
+        elapsed = (
+            now - self.last_cmd_time
+        ).nanoseconds /1e9
+
+        # timeout 검사
+        if elapsed > self.timeout_sec:
+            self.linear_velocity = 0.0
+            self.angular_velocity = 0.0
+
+        # ==========================
+
+
         # heading update
         self.theta += (
             self.angular_velocity*self.dt
