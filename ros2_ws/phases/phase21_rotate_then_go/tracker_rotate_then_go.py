@@ -112,6 +112,11 @@ class WaypointTracker(Node):
             target_theta - self.theta
         )
 
+        angle_error = math.atan2(
+            math.sin(angle_error),
+            math.cos(angle_error)
+        )
+
         # 로깅 메시지 출력 추가
         self.get_logger().info(
             f'x={self.x:.2f},'
@@ -142,10 +147,25 @@ class WaypointTracker(Node):
         # P controll -> Kp x 오차. 
 
         cmd = Twist()
-        cmd.linear.x = 0.5
-        cmd.angular.z = (
-            1.0 * angle_error
+        
+        if abs(angle_error) >0.1:
+            # 방향먼저 맞춤
+            cmd.linear.x = 0.0
+            cmd.angular.z = (
+                1.0 * angle_error
+            )
+        else:
+            # 방향 맞으면 직진
+            cmd.linear.x = 0.5
+            cmd.angular.z = (
+                1.0*angle_error
+            )
+        self.get_logger().info(
+            f'WP={self.current_waypoint},'
+            f'dist={distance:.2f},'
+            f'angle={angle_error:.2f}'
         )
+
         self.cmd_pub.publish(cmd)
 
 def main(args=None):
