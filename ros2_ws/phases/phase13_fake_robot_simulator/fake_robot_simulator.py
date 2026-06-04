@@ -11,7 +11,7 @@ class FakeRobotSimulator(Node):
         super().__init__('fake_robot_simulator')
 
         self.create_subscription(
-            Twist(),
+            Twist,
             'cmd_vel',
             self.cmd_callback,
             10
@@ -92,6 +92,12 @@ class FakeRobotSimulator(Node):
         # heading update
         self.theta += (
             self.angular_velocity*self.dt
+        )
+
+        # 각도 정규화
+        self.theta = math.atan2(
+            math.sin(self.theta),
+            math.cos(self.theta)
         )
 
         # positiono update
