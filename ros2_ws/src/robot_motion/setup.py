@@ -32,7 +32,10 @@ setup(
 
             'robot_marker = robot_motion.robot_marker:main',
 
-            'cross_track_visualizer = robot_motion.cross_track_visualizer:main'
+            'cross_track_visualizer = robot_motion.cross_track_visualizer:main',
+
+            'segment_cte_visualizer = robot_motion.segment_cte_visualizer:main'
+
         ],
     },
 )
