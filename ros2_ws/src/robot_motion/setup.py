@@ -28,6 +28,7 @@ setup(
 
 		    'pure_pursuit_tracker = robot_motion.pure_pursuit_tracker:main',
 
+            'path_visualizer = robot_motion.path_visualizer:main',
         ],
     },
 )

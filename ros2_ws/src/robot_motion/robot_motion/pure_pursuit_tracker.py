@@ -38,13 +38,16 @@ class PurePursuitTracker(Node):
             (0.0, 2.5),
             (0.0, 2.0),
             (0.0, 1.5),
-            (0.0, 1.0),
-            (0.0, 0.5),
-            (0.0, 0.0)
+            # (0.0, 1.0),
+            # (0.0, 0.5),
+            # (0.0, 0.0)
         ]
 
-        # 몇 개 앞 path point를 바라볼 것인가
-        self.lookahead_offset = 1
+        # === Pure Pursuit 파라미터 ===
+        self.lookahead_offset = 3
+        self.linear_speed = 0.5
+        # ============================
+
 
         # robot state
         self.x = -0.5
@@ -137,7 +140,7 @@ class PurePursuitTracker(Node):
         if (
             lookahead_index == len(self.path) - 1
             and
-            final_distance < 0.3
+            final_distance < 0.2
         ):
 
             cmd = Twist()
@@ -145,6 +148,9 @@ class PurePursuitTracker(Node):
             self.cmd_pub.publish(cmd)
 
             self.get_logger().info(
+                f'CLOSE={closest_index}, '
+                f'LOOK={lookahead_index}, '
+                f'FINAL={final_distance:.2f},'
                 'Path Completed'
             )
 
@@ -157,52 +163,54 @@ class PurePursuitTracker(Node):
         dx = goal_x - self.x
         dy = goal_y - self.y
 
-        target_theta = math.atan2(
-            dy,
-            dx
+        local_x = (
+            math.cos(self.theta) * dx +
+            math.sin(self.theta) * dy
         )
 
-        angle_error = (
-            target_theta -
-            self.theta
-        )
-
-        angle_error = math.atan2(
-            math.sin(angle_error),
-            math.cos(angle_error)
+        local_y = (
+            -math.sin(self.theta) * dx +
+            math.cos(self.theta) * dy 
         )
 
         # ==========================
-        # 제어
+        # Lookahead Distance
         # ==========================
 
+        ld = math.sqrt(
+            local_x ** 2 +
+            local_y ** 2
+        )
+        if ld < 0.001:
+            return
+        
+        # pure pursuit
+
+        curvature = (
+            2.0 *
+            local_y/
+            (ld**2)
+        )
+
+        # cmd vel 생성
         cmd = Twist()
 
-        if abs(angle_error) > 0.15:
+        cmd.linear.x = self.linear_speed
 
-            cmd.linear.x = 0.0
-
-            cmd.angular.z = (
-                1.5 *
-                angle_error
-            )
-
-        else:
-
-            cmd.linear.x = 0.4
-
-            cmd.angular.z = (
-                2.0 *
-                angle_error
-            )
+        cmd.angular.z=(
+            self.linear_speed*
+            curvature
+        )
 
         self.cmd_pub.publish(cmd)
 
         self.get_logger().info(
-            f'CLOSEST={closest_index}, '
-            f'LOOK={lookahead_index}, '
-            f'ERR={angle_error:.2f}'
+            f'CLOSE = {closest_index}, '
+            f'LOOK = {lookahead_index}, '
+            f'LD = {ld:.2f}, '
+            f'CURV = {curvature:.2f}'
         )
+
 
 
 def main(args=None):
