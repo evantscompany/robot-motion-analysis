@@ -36,7 +36,10 @@ setup(
 
             'segment_cte_visualizer = robot_motion.segment_cte_visualizer:main',
 
-            'stanley_controller = robot_motion.stanley_controller:main'
+            'stanley_controller = robot_motion.stanley_controller:main',
+
+            'grid_map_visualizer = robot_motion.grid_map_visualizer:main',
+
 
         ],
     },
