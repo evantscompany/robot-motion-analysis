@@ -34,7 +34,9 @@ setup(
 
             'cross_track_visualizer = robot_motion.cross_track_visualizer:main',
 
-            'segment_cte_visualizer = robot_motion.segment_cte_visualizer:main'
+            'segment_cte_visualizer = robot_motion.segment_cte_visualizer:main',
+
+            'stanley_controller = robot_motion.stanley_controller:main'
 
         ],
     },
