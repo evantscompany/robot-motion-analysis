@@ -40,6 +40,10 @@ setup(
 
             'grid_map_visualizer = robot_motion.grid_map_visualizer:main',
 
+            'astar_path_planner = robot_motion.astar_path_planner:main',
+
+            'a_star_search_visualizer = robot_motion.a_star_search_visualizer:main',
+
 
         ],
     },
