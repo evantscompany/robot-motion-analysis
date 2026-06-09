@@ -44,6 +44,8 @@ setup(
 
             'a_star_search_visualizer = robot_motion.a_star_search_visualizer:main',
 
+            'dijkstra_visualizer = robot_motion.dijkstra_visualizer:main',
+
 
         ],
     },

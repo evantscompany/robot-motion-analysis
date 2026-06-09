@@ -88,11 +88,8 @@ class AStarSearchVisualizer(Node):
 
     def heuristic(self, a, b):
 
-        return (
-            abs(a[0] - b[0]) +
-            abs(a[1] - b[1])
-        )
-
+        return 0
+    
     # ==========================
     # 한 스텝씩 탐색
     # ==========================
@@ -184,13 +181,8 @@ class AStarSearchVisualizer(Node):
                     (nx, ny)
                 ] = tentative_g
 
-                f_score = (
-                    tentative_g +
-                    self.heuristic(
-                        (nx, ny),
-                        self.goal
-                    )
-                )
+                f_score = tentative_g 
+                    
 
                 heapq.heappush(
                     self.open_set,
@@ -247,9 +239,9 @@ class AStarSearchVisualizer(Node):
         marker.scale.y = 0.8
         marker.scale.z = 0.05
 
-        marker.color.r = 1.0
+        marker.color.r = 0.0
         marker.color.g = 0.0
-        marker.color.b = 0.0
+        marker.color.b = 1.0
         marker.color.a = 0.6
 
         for cell in self.closed_set:
