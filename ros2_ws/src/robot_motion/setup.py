@@ -46,7 +46,11 @@ setup(
 
             'dijkstra_visualizer = robot_motion.dijkstra_visualizer:main',
 
-            'bezier_path_visualizer = robot_motion.bezier_path_visualizer:main'
+            'bezier_path_visualizer = robot_motion.bezier_path_visualizer:main',
+
+            'costmap_visualizer = robot_motion.costmap_visualizer:main',
+
+            'weighted_a_star_visualizer = robot_motion.weighted_a_star_visualizer:main',
 
 
         ],
