@@ -46,6 +46,8 @@ setup(
 
             'dijkstra_visualizer = robot_motion.dijkstra_visualizer:main',
 
+            'bezier_path_visualizer = robot_motion.bezier_path_visualizer:main'
+
 
         ],
     },
