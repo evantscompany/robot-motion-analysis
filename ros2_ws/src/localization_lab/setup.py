@@ -24,7 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'dead_reckoning = localization_lab.dead_reckoning:main'
+            'dead_reckoning = localization_lab.dead_reckoning:main',
+            'fake_gps_localization = localization_lab.fake_gps_localization:main'
         ],
     },
 )
