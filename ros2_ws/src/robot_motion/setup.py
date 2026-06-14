@@ -52,6 +52,10 @@ setup(
 
             'weighted_a_star_visualizer = robot_motion.weighted_a_star_visualizer:main',
 
+            'dynamic_replanning_visualizer = robot_motion.dynamic_replanning_visualizer:main',
+            
+            'dynamic_navigation_simulator = robot_motion.dynamic_navigation_simulator:main'
+
 
         ],
     },
