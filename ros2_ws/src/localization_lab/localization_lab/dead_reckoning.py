@@ -6,6 +6,8 @@ from visualization_msgs.msg import Marker
 
 import math
 
+import random
+
 
 class DeadReckoning(Node):
 
@@ -100,33 +102,73 @@ class DeadReckoning(Node):
             self.dt
         )
 
+
+
         # ==========================
-        # Dead Reckoning
+        # Noisy Dead Reckoning
         # ==========================
 
-        self.est_theta += (
+        measured_v = (
+
+            self.linear_velocity
+
+            +
+
+            random.gauss(
+                0.0,
+                0.05
+            )
+
+        )
+
+        measured_w = (
+
             self.angular_velocity
+
+            +
+
+            random.gauss(
+                0.0,
+                0.02
+            )
+
+        )
+
+        self.est_theta += (
+            measured_w
             * self.dt
         )
 
         self.est_x += (
-            self.linear_velocity
+
+            measured_v
+
             *
+
             math.cos(
                 self.est_theta
             )
+
             *
+
             self.dt
+
         )
 
         self.est_y += (
-            self.linear_velocity
+
+            measured_v
+
             *
+
             math.sin(
                 self.est_theta
             )
+
             *
+
             self.dt
+
         )
 
         self.publish_markers()
