@@ -1,7 +1,6 @@
 from setuptools import find_packages, setup
-from glob import glob
 
-package_name = 'localization_lab'
+package_name = 'perception_lab'
 
 setup(
     name=package_name,
@@ -10,12 +9,7 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
-        ('share/' + package_name, 
-         ['package.xml']),
-        ('share/' + package_name + '/launch',
-         glob('launch/*.py')
-        ),
-
+        ('share/' + package_name, ['package.xml']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -30,10 +24,6 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'dead_reckoning = localization_lab.dead_reckoning:main',
-            'fake_gps_localization = localization_lab.fake_gps_localization:main',
-            'kalman_filter_localization_v2 = localization_lab.kalman_filter_localization_v2:main',
-            'error_analyzer = localization_lab.error_analyzer:main'
         ],
     },
 )
