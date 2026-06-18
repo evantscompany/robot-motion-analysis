@@ -29,6 +29,7 @@ setup(
         'console_scripts': [
             'fake_camera = perception_lab.fake_camera:main',
             'image_viewer = perception_lab.image_viewer:main',
+            'red_ball_detector = perception_lab.red_ball_detector:main',
         ],
     },
 )
