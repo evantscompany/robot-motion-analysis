@@ -31,7 +31,10 @@ setup(
             'image_viewer = perception_lab.image_viewer:main',
             'red_ball_detector = perception_lab.red_ball_detector:main',
             'p_controller_tracker = perception_lab.p_controller_tracker:main',
-            
+            'visual_servo_simulator = perception_lab.visual_servo_simulator:main',
+            'fake_depth_camera = perception_lab.fake_depth_camera:main',
+            'object_localizer = perception_lab.object_localizer:main'
+
         ],
     },
 )
